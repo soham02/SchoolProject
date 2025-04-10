@@ -11,6 +11,15 @@ const darkModeToggle = document.getElementById("dark-mode-toggle");
 const historyList = document.querySelector(".history-list");
 
 
+// State management
+let useFahrenheit = false;
+let searchHistory = JSON.parse(localStorage.getItem("weatherSearchHistory")) || [];
+
+// Initialize dark mode
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+}
+
 // Temperature conversion functions
 const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
 const kelvinToCelsius = (kelvin) => kelvin - 273.15;
@@ -18,6 +27,22 @@ const kelvinToPreferredUnit = (kelvin) => {
     const celsius = kelvinToCelsius(kelvin);
     return useFahrenheit ? celsiusToFahrenheit(celsius) : celsius;
 };
+
+const updateSearchHistory = (cityName) => {
+    if (!searchHistory.includes(cityName)) {
+        searchHistory.unshift(cityName);
+        if (searchHistory.length > 5) searchHistory.pop();
+        localStorage.setItem("weatherSearchHistory", JSON.stringify(searchHistory));
+        renderSearchHistory();
+    }
+};
+
+const renderSearchHistory = () => {
+    historyList.innerHTML = searchHistory
+        .map(city => `<li class="history-item">${city}</li>`)
+        .join("");
+};
+
 
 const createWeatherCard = (cityName, weatherItem, index) => {
     const temp = kelvinToPreferredUnit(weatherItem.main.temp);
@@ -75,6 +100,8 @@ const getWeatherDetails = async (cityName, latitude, longitude) => {
             }
         });
 
+        updateSearchHistory(cityName);
+
         // Clearing previous weather data
         cityInput.value = "";
         currentWeatherDiv.innerHTML = "";
@@ -124,6 +151,37 @@ const getCityCoordinates = async () => {
     }
 };
 
+const getUserCoordinates = () => {
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+                showLoading(true);
+                const API_URL = `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`;
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (!data.length) {
+                    throw new Error("Unable to determine city name");
+                }
+
+                const { name } = data[0];
+                await getWeatherDetails(name, latitude, longitude);
+            } catch (error) {
+                showError(error.message);
+                showLoading(false);
+            }
+        },
+        (error) => {
+            if (error.code === error.PERMISSION_DENIED) {
+                showError("Geolocation request denied. Please reset location permission to grant access again.");
+            } else {
+                showError("Geolocation request error. Please reset location permission.");
+            }
+        }
+    );
+};
+
 // Event Listeners
 locationButton.addEventListener("click", getUserCoordinates);
 searchButton.addEventListener("click", getCityCoordinates);
@@ -143,4 +201,12 @@ darkModeToggle.addEventListener("click", () => {
     localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
 });
 
+historyList.addEventListener("click", (e) => {
+    if (e.target.classList.contains("history-item")) {
+        cityInput.value = e.target.textContent;
+        getCityCoordinates();
+    }
+});
 
+// Initialize search history
+renderSearchHistory();
