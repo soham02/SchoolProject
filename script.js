@@ -7,6 +7,7 @@ const API_KEY = "3664b572da9ad18496a0079bbea6a9db"; // API key for OpenWeatherMa
 const weatherAlertsDiv = document.getElementById("weather-alerts");
 
 const tempUnitToggle = document.getElementById("temp-unit-toggle");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
 
 // Temperature conversion functions
 const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
@@ -116,6 +117,9 @@ tempUnitToggle.addEventListener("change", () => {
 });
 
 
-
+darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark-mode") ? "enabled" : "disabled");
+});
 
 
