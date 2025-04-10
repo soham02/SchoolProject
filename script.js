@@ -8,6 +8,8 @@ const weatherAlertsDiv = document.getElementById("weather-alerts");
 
 const tempUnitToggle = document.getElementById("temp-unit-toggle");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
+const historyList = document.querySelector(".history-list");
+
 
 // Temperature conversion functions
 const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
@@ -64,6 +66,15 @@ const getWeatherDetails = async (cityName, latitude, longitude) => {
             throw new Error(data.message || "Failed to fetch weather data");
         }
 
+        // Filter the forecasts to get only one forecast per day
+        const uniqueForecastDays = [];
+        const fiveDaysForecast = data.list.filter(forecast => {
+            const forecastDate = new Date(forecast.dt_txt).getDate();
+            if (!uniqueForecastDays.includes(forecastDate)) {
+                return uniqueForecastDays.push(forecastDate);
+            }
+        });
+
         // Clearing previous weather data
         cityInput.value = "";
         currentWeatherDiv.innerHTML = "";
@@ -71,6 +82,16 @@ const getWeatherDetails = async (cityName, latitude, longitude) => {
 
         // Check for weather alerts
         checkWeatherAlerts(data);
+
+        // Creating weather cards and adding them to the DOM
+        fiveDaysForecast.forEach((weatherItem, index) => {
+            const html = createWeatherCard(cityName, weatherItem, index);
+            if (index === 0) {
+                currentWeatherDiv.insertAdjacentHTML("beforeend", html);
+            } else {
+                weatherCardsDiv.insertAdjacentHTML("beforeend", html);
+            }
+        });
     } catch (error) {
         showError(error.message);
     } finally {
