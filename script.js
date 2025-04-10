@@ -6,6 +6,16 @@ const weatherCardsDiv = document.querySelector(".weather-cards");
 const API_KEY = "3664b572da9ad18496a0079bbea6a9db"; // API key for OpenWeatherMap API
 const weatherAlertsDiv = document.getElementById("weather-alerts");
 
+const tempUnitToggle = document.getElementById("temp-unit-toggle");
+
+// Temperature conversion functions
+const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
+const kelvinToCelsius = (kelvin) => kelvin - 273.15;
+const kelvinToPreferredUnit = (kelvin) => {
+    const celsius = kelvinToCelsius(kelvin);
+    return useFahrenheit ? celsiusToFahrenheit(celsius) : celsius;
+};
+
 const createWeatherCard = (cityName, weatherItem, index) => {
     const temp = kelvinToPreferredUnit(weatherItem.main.temp);
     const unit = useFahrenheit ? "°F" : "°C";
@@ -97,6 +107,13 @@ locationButton.addEventListener("click", getUserCoordinates);
 searchButton.addEventListener("click", getCityCoordinates);
 cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates());
 
+tempUnitToggle.addEventListener("change", () => {
+    useFahrenheit = tempUnitToggle.checked;
+    if (currentWeatherDiv.innerHTML) {
+        const cityName = document.querySelector(".current-weather h2").textContent.split(" (")[0];
+        getCityCoordinates();
+    }
+});
 
 
 

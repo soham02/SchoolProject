@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Weather Dashboard</title>
+  <script src="script.js" defer></script>
+  
 </head>
 <body>
   <h1>Weather Dashboard</h1>
@@ -11,6 +13,14 @@
     <input type="text" placeholder="E.g., New York, London, Tokyo">
     <button>Search</button>
     <button>Use Current Location</button>
+    <div class="temp-toggle">
+        <span>°C</span>
+        <label class="switch">
+          <input type="checkbox" id="temp-unit-toggle">
+          <span class="slider"></span>
+        </label>
+        <span>°F</span>
+    </div>
     <div>
       <h2>_______ ( ______ )</h2>
       <p>Temperature: __°C</p>
