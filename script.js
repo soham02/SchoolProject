@@ -15,6 +15,11 @@ const historyList = document.querySelector(".history-list");
 let useFahrenheit = false;
 let searchHistory = JSON.parse(localStorage.getItem("weatherSearchHistory")) || [];
 
+// Initialize dark mode
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+}
+
 // Temperature conversion functions
 const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
 const kelvinToCelsius = (kelvin) => kelvin - 273.15;
