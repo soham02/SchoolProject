@@ -1,28 +1,3 @@
-
-
-
-
-/* Dark mode styles */
-.dark-mode {
-    background: #1a1a1a;
-    color: #fff;
-  }
-
-.dark-mode .weather-input input {
-    background: #333;
-    color: #fff;
-    border-color: #444;
-  }
-
-.dark-mode .weather-cards .card {
-    background: #333;
-  }
-
-.dark-mode .weather-alert {
-    background: #2c2c2c;
-    color: #ffd700;
-    border-left-color: #ffd700;
-  }
   /* Import Google font - Open Sans */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 * {

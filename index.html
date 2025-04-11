@@ -1,101 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="script.js" defer></script>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>
-      Weather Dashboard
-      <button id="dark-mode-toggle" class="theme-toggle">
-        <svg
-          class="sun-icon"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-        >
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-      </button>
+        Weather Dashboard
+        <button id="dark-mode-toggle" class="theme-toggle">
+            <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
     </h1>
-    <div>
-      <h3>Enter a City Name</h3>
-      <input type="text" placeholder="E.g., New York, London, Tokyo" />
-      <button>Search</button>
-      <button>Use Current Location</button>
+    <div class="container">
+        <div class="weather-input">
+            <h3>Enter a City Name</h3>
+            <input class="city-input" type="text" placeholder="E.g., New York, London, Tokyo">
+            <button class="search-btn">Search</button>
+            <div class="separator"></div>
+            <button class="location-btn">Use Current Location</button>
 
-      <div class="temp-toggle">
-        <span>°C</span>
-        <label class="switch">
-          <input type="checkbox" id="temp-unit-toggle" />
-          <span class="slider"></span>
-        </label>
-        <span>°F</span>
-      </div>
+            <div class="temp-toggle">
+                <span>°C</span>
+                <label class="switch">
+                    <input type="checkbox" id="temp-unit-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span>°F</span>
+            </div>
 
-      <div class="search-history">
-        <h3>Recent Searches</h3>
-        <ul class="history-list"></ul>
-      </div>
-
-      <div>
-        <h2>_______ ( ______ )</h2>
-        <p>Temperature: __°C</p>
-        <p>Wind: __ M/S</p>
-        <p>Humidity: __%</p>
-        <div>
-          <img src="" alt="weather-icon" />
-          <p>Description</p>
+            <div class="search-history">
+                <h3>Recent Searches</h3>
+                <ul class="history-list"></ul>
+            </div>
         </div>
-      </div>
 
-      <div class="days-forecast">
-        <h2>5-Day Forecast</h2>
-        <ul class="weather-cards">
-          <li class="card">
-            <h3>( ______ )</h3>
-            <h6>Temp: __C</h6>
-            <h6>Wind: __ M/S</h6>
-            <h6>Humidity: __%</h6>
-          </li>
-          <li class="card">
-            <h3>( ______ )</h3>
-            <h6>Temp: __C</h6>
-            <h6>Wind: __ M/S</h6>
-            <h6>Humidity: __%</h6>
-          </li>
-          <li class="card">
-            <h3>( ______ )</h3>
-            <h6>Temp: __C</h6>
-            <h6>Wind: __ M/S</h6>
-            <h6>Humidity: __%</h6>
-          </li>
-          <li class="card">
-            <h3>( ______ )</h3>
-            <h6>Temp: __C</h6>
-            <h6>Wind: __ M/S</h6>
-            <h6>Humidity: __%</h6>
-          </li>
-          <li class="card">
-            <h3>( ______ )</h3>
-            <h6>Temp: __C</h6>
-            <h6>Wind: __ M/S</h6>
-            <h6>Humidity: __%</h6>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </body>
+        <div class="weather-data">
+            <div id="error-message" class="error-message" style="display: none;"></div>
+            <div id="weather-alerts" class="weather-alert" style="display: none;"></div>
+
+            <div class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+
+
+
+            <div class="current-weather">
+                <div class="details">
+                    <h2>_______ ( ______ )</h2>
+                    <h6>Temperature: __°C</h6>
+                    <h6>Wind: __ M/S</h6>
+                    <h6>Humidity: __%</h6>
+                </div>
+                <div class="icon">
+                    <img src="" alt="weather-icon">
+                    <h6></h6>
+                </div>
+            </div>
+
+            <div class="days-forecast">
+                <h2>5-Day Forecast</h2>
+                <ul class="weather-cards">
+                    <li class="card">
+                        <h3>( ______ )</h3>
+                        <h6>Temp: __C</h6>
+                        <h6>Wind: __ M/S</h6>
+                        <h6>Humidity: __%</h6>
+                    </li>
+                    <li class="card">
+                        <h3>( ______ )</h3>
+                        <h6>Temp: __C</h6>
+                        <h6>Wind: __ M/S</h6>
+                        <h6>Humidity: __%</h6>
+                    </li>
+                    <li class="card">
+                        <h3>( ______ )</h3>
+                        <h6>Temp: __C</h6>
+                        <h6>Wind: __ M/S</h6>
+                        <h6>Humidity: __%</h6>
+                    </li>
+                    <li class="card">
+                        <h3>( ______ )</h3>
+                        <h6>Temp: __C</h6>
+                        <h6>Wind: __ M/S</h6>
+                        <h6>Humidity: __%</h6>
+                    </li>
+                    <li class="card">
+                        <h3>( ______ )</h3>
+                        <h6>Temp: __C</h6>
+                        <h6>Wind: __ M/S</h6>
+                        <h6>Humidity: __%</h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</body>
+
 </html>
