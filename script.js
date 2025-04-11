@@ -8,6 +8,8 @@ const weatherAlertsDiv = document.getElementById("weather-alerts");
 
 const tempUnitToggle = document.getElementById("temp-unit-toggle");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
+const errorMessageDiv = document.getElementById("error-message");
+const loadingSpinner = document.querySelector(".loading-spinner");
 const historyList = document.querySelector(".history-list");
 
 
@@ -27,6 +29,20 @@ const kelvinToPreferredUnit = (kelvin) => {
     const celsius = kelvinToCelsius(kelvin);
     return useFahrenheit ? celsiusToFahrenheit(celsius) : celsius;
 };
+
+const showError = (message) => {
+    errorMessageDiv.textContent = message;
+    errorMessageDiv.style.display = "block";
+    setTimeout(() => {
+        errorMessageDiv.style.display = "none";
+    }, 5000);
+};
+
+const showLoading = (show) => {
+    loadingSpinner.style.display = show ? "flex" : "none";
+    currentWeatherDiv.style.display = show ? "none" : "flex";
+};
+
 
 const updateSearchHistory = (cityName) => {
     if (!searchHistory.includes(cityName)) {
