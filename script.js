@@ -22,6 +22,11 @@ if (localStorage.getItem("darkMode") === "enabled") {
     document.body.classList.add("dark-mode");
 }
 
+let lastCoords = null;
+let lastCity = null;
+let lastUnit = 'metric'; // default is Celsius
+let lastData = null;
+
 // Temperature conversion functions
 const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
 const kelvinToCelsius = (kelvin) => kelvin - 273.15;
@@ -106,6 +111,10 @@ const getWeatherDetails = async (cityName, latitude, longitude) => {
         if (!response.ok) {
             throw new Error(data.message || "Failed to fetch weather data");
         }
+
+        lastCity = cityName;
+        lastCoords = { lat: latitude, lon: longitude };
+        lastData = data;
 
         // Filter the forecasts to get only one forecast per day
         const uniqueForecastDays = [];
@@ -205,9 +214,8 @@ cityInput.addEventListener("keyup", e => e.key === "Enter" && getCityCoordinates
 
 tempUnitToggle.addEventListener("change", () => {
     useFahrenheit = tempUnitToggle.checked;
-    if (currentWeatherDiv.innerHTML) {
-        const cityName = document.querySelector(".current-weather h2").textContent.split(" (")[0];
-        getCityCoordinates();
+    if (lastData && lastCity) {
+        renderWeather(lastData, lastCity);
     }
 });
 
@@ -223,6 +231,31 @@ historyList.addEventListener("click", (e) => {
         getCityCoordinates();
     }
 });
+
+const renderWeather = (data, cityName) => {
+    cityInput.value = "";
+    currentWeatherDiv.innerHTML = "";
+    weatherCardsDiv.innerHTML = "";
+
+    checkWeatherAlerts(data);
+
+    const uniqueForecastDays = [];
+    const fiveDaysForecast = data.list.filter(forecast => {
+        const forecastDate = new Date(forecast.dt_txt).getDate();
+        if (!uniqueForecastDays.includes(forecastDate)) {
+            return uniqueForecastDays.push(forecastDate);
+        }
+    });
+
+    fiveDaysForecast.forEach((weatherItem, index) => {
+        const html = createWeatherCard(cityName, weatherItem, index);
+        if (index === 0) {
+            currentWeatherDiv.insertAdjacentHTML("beforeend", html);
+        } else {
+            weatherCardsDiv.insertAdjacentHTML("beforeend", html);
+        }
+    });
+};
 
 // Initialize search history
 renderSearchHistory();
