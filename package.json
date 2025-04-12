@@ -1,0 +1,23 @@
+{
+  "name": "schoolproject",
+  "version": "1.0.0",
+  "description": "A lightweight and responsive weather forecast application that provides real-time weather data using the OpenWeatherMap API. This project demonstrates clean modular JavaScript, weather data rendering, and configuration management using Git and GitHub.",
+  "main": "script.js",
+  "scripts": {
+  "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soham02/SchoolProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/soham02/SchoolProject/issues"
+  },
+  "homepage": "https://github.com/soham02/SchoolProject#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
